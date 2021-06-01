@@ -42,6 +42,9 @@ public open class VizContainerView(
     private val vizs = mutableListOf<Viz>()
     private val renderers = mutableListOf<AndroidCanvasRenderer>()
 
+    public override val density
+        get() = context.resources.displayMetrics.density.toDouble()
+
     override fun newViz(init: Viz.() -> Unit): Viz {
         val viz = Viz().apply(init)
         vizs += viz
