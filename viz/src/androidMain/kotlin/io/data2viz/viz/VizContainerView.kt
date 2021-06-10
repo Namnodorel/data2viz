@@ -22,11 +22,9 @@ import android.content.Context
 import android.graphics.Canvas
 import android.view.MotionEvent
 import android.view.View
-import io.data2viz.ExperimentalD2V
 import io.data2viz.geom.Size
 import io.data2viz.geom.size
 import io.data2viz.timer.Timer
-import io.data2viz.timer.timer
 
 
 /**
@@ -42,11 +40,14 @@ public open class VizContainerView(
     private val vizs = mutableListOf<Viz>()
     private val renderers = mutableListOf<AndroidCanvasRenderer>()
 
-    public override val density
+    public override val density: Double
         get() = context.resources.displayMetrics.density.toDouble()
 
     override fun newViz(init: Viz.() -> Unit): Viz {
-        val viz = Viz().apply(init)
+        val viz = Viz().apply {
+            size = size(this@VizContainerView.size.width, this@VizContainerView.size.height)
+            init()
+        }
         vizs += viz
 
         val renderer = AndroidCanvasRenderer(context, viz) {
@@ -58,7 +59,7 @@ public open class VizContainerView(
     }
 
 
-    override var size: Size = size(100.0, 100.0)
+    override var size: Size = size(500.0, 300.0)
         get() = field
         set(value) {
             field = value
@@ -68,6 +69,11 @@ public open class VizContainerView(
             }
         }
 
+    //    private var _scale: Float = 1f
+//
+//    internal val scale: Float
+//        get() = _scale
+//
     private val timers = mutableListOf<Timer>()
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
