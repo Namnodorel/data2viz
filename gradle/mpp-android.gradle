@@ -1,50 +1,47 @@
 
 
-if (include_android.toBoolean()) {
-    apply plugin: 'com.android.library'
-    apply plugin: 'org.jetbrains.kotlin.multiplatform'
+apply plugin: 'com.android.library'
+apply plugin: 'org.jetbrains.kotlin.multiplatform'
+android {
+    compileSdkVersion 30
+    defaultConfig {
+        minSdkVersion 17
+        targetSdkVersion 30
+        versionCode 1
+        versionName "$version"
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    sourceSets {
+        main {
+            manifest.srcFile 'src/androidMain/AndroidManifest.xml'
+        }
+    }
+}
+
+kotlin {
+    explicitApiWarning()
     android {
-        compileSdkVersion 30
-        defaultConfig {
-            minSdkVersion 17
-            targetSdkVersion 30
-            versionCode 1
-            versionName "$version"
-            testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
-        }
-        buildTypes {
-            release {
-                minifyEnabled false
+        publishLibraryVariants("debug", "release")
+    }
+    sourceSets {
+        main {
+            dependencies {
+                implementation kotlin('stdlib')
             }
         }
-        sourceSets {
-            main {
-                manifest.srcFile 'src/androidMain/AndroidManifest.xml'
+        test {
+            dependencies {
+                implementation kotlin('stdlib')
+                implementation project(":tests")
+                implementation kotlin('test')
+                implementation kotlin('test-junit')
             }
         }
     }
-
-    kotlin {
-        explicitApiWarning()
-        android {
-            publishLibraryVariants("debug", "release")
-        }
-        sourceSets {
-            main {
-                dependencies {
-                    implementation kotlin('stdlib')
-                }
-            }
-            test {
-                dependencies {
-                    implementation kotlin('stdlib')
-                    implementation project(":tests")
-                    implementation kotlin('test')
-                    implementation kotlin('test-junit')
-                }
-            }
-        }
-    }
-
 }
 
